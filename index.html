@@ -1,0 +1,201 @@
+<html>
+<head>
+  <!-- Do you need Material Icons? -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+
+  <!-- Do you need Fontawesome? -->
+  <link href="all.css" rel="stylesheet">
+
+  <!-- Do you need Ionicons? -->
+  <link href="ionicons.min.css" rel="stylesheet">
+
+  <!-- Do you need MDI? -->
+  <link href="materialdesignicons.min.css" rel="stylesheet">
+
+  <!-- Do you need all animations? -->
+  <link href="animate.min.css" rel="stylesheet">
+
+
+  <!--
+    Finally, add Quasar's CSS:
+    Replace version below (1.0.3) with your desired version of Quasar.
+    Add ".rtl" for the RTL support (example: quasar.rtl.min.css).
+  -->
+  <link href="quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <div id="q-app">
+<q-layout view="hHh lpR fFf">
+
+    <q-header reveal class="bg-white text-black">
+      <q-toolbar>
+
+        <q-btn style="color: red" v-if="getRoute()==='/' ||getRoute()===''" dense flat icon="menu" @click="left = !left"></q-btn>
+        <q-btn style="color: red" v-else-if="getRoute()==='/faq'" dense flat icon="menu" @click="left = !left"></q-btn>
+        <q-btn style="color: red" v-else-if="getRoute()==='/livedep'" dense flat icon="menu" @click="left = !left"></q-btn>
+        <q-btn style="color: red" v-else-if="showTicket()" dense flat icon="menu" @click="left = !left"></q-btn>
+        <q-btn style="color: red;" v-else dense flat round icon="arrow_back" @click="goBack()"></q-btn>
+
+        
+       	<img v-if="getRoute()==='/' ||getRoute()===''" width="180" src="LOGO.jpeg" alt="" />
+        
+
+        <q-toolbar-title>
+          {{ (getRoute()==='/' ||getRoute()==='') ? '' : title }}
+        </q-toolbar-title>
+        <q-btn v-if="showBasket()" @click="changeRoute('basket')" color="grey" flat icon="shopping_basket">
+          <q-badge v-if="basketCount > 0" color="red" floating>{{basketCount}}</q-badge> 
+        </q-btn>
+        <q-btn v-if="! loggedIn" color="grey" flat icon="person_outline">
+          <q-menu>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup @click="changeRoute('signin')">
+                <q-item-section>Sign in</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="changeRoute('register')">
+                <q-item-section>Register</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+        <q-btn v-if="loggedIn" color="grey" flat icon="person">
+          <q-menu>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup @click="signOut()">
+                <q-item-section>Sign out</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-toolbar>
+    </q-header>
+
+    <q-footer reveal class="bg-grey-3" v-if="showBottombar()">
+     
+      <q-btn-group spread>
+        <q-btn @click="changeRoute('')" stack flat :class="homeClass" style="padding-left: 4px; padding-right: 4px">
+          <q-icon name="home"></q-icon>
+          <div :style="homeStyle">Home</div>
+        </q-btn>
+        <q-btn @click="changeRoute('route')" stack flat :class="routeClass" style="padding-left: 4px; padding-right: 4px">
+          <q-icon name="home"></q-icon>
+          <div :style="routeStyle">Plan</div>
+        </q-btn>
+        <q-btn @click="showPurchase()" stack flat class="text-black" style="padding-left: 4px; padding-right: 4px">
+          <q-icon style="color: grey" name="launch"></q-icon>
+          <div style="font-size: 10px">Tickets</div>
+        </q-btn>
+        <q-btn @click="changeRoute('livedep')" stack :class="depClass" style="padding-left: 2px; padding-right: 2px">
+          <q-icon name="train"></q-icon>
+          <div :style="depStyle">Live Tickets</div>
+        </q-btn>
+        <q-btn stack @click="showTickets()" :class="tickWalletClass" style="padding-left: 4px; padding-right: 4px">
+          <q-icon style="color: grey" name="account_balance_wallet"></q-icon>
+          <div :style="tickWalletStyle">E-Tickets</div>
+        </q-btn>
+      </q-btn-group>
+    
+    </q-footer>
+
+    <q-drawer v-model="left" side="left" overlay behavior="mobile" elevated>
+      <q-list>
+
+        <q-item @click="changeRoute('')" clickable :active="checkA('/')" v-ripple>
+          <q-item-section avatar>
+            <q-icon :name="'home'" />
+          </q-item-section>
+          <q-item-section>Home</q-item-section>
+        </q-item>
+
+         <q-item @click="changeRoute('info')" clickable :active="false" v-ripple>
+          <q-item-section avatar>
+            <q-icon :name="'inbox'" />
+          </q-item-section>
+          <q-item-section>Info</q-item-section>
+        </q-item>
+
+         <q-item @click="changeRoute('faq')" clickable  :active="checkA('/faq')" v-ripple>
+          <q-item-section avatar>
+            <q-icon :name="'inbox'" />
+          </q-item-section>
+          <q-item-section>F.A.Qs</q-item-section>
+        </q-item>
+
+        <q-item @click="changeRoute('livedep')" :active="checkA('/livedep')" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon :name="'train'" />
+          </q-item-section>
+          <q-item-section>Live Departures</q-item-section>
+        </q-item>
+
+      </q-list>
+    </q-drawer>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+
+  </q-layout>
+  </div>
+
+  
+
+  <!-- You need Vue too -->
+  <script src="vue.min.js"></script>
+
+  <script src="vue-router.js"></script>
+
+  <script src="vuex.min.js"></script>
+
+  <!--
+    Add Quasar's JS:
+    Replace version below (1.0.3) with your desired version of Quasar.
+  -->
+  <script src="quasar.umd.min.js"></script>
+
+<!--    <script src="https://cdn.jsdelivr.net/npm/quasar@^1.0.3/dist/quasar.umd.min.js"></script> -->
+  <!--
+    If you want to add a Quasar Language pack (other than "en-us").
+    Notice "pt-br" in "i18n.pt-br.umd.min.js" for Brazilian Portuguese language pack.
+    Replace version below (1.0.0-beta.0) with your desired version of Quasar.
+    Also check final <script> tag below to enable the language
+    Language pack list: https://github.com/quasarframework/quasar/tree/dev/ui/lang
+  -->
+ 
+
+  <!--
+    If you want to make Quasar components (not your own) use a specific set of icons (unless you're using Material Icons already).
+    Replace version below (1.0.3) with your desired version of Quasar.
+    Icon sets list: https://github.com/quasarframework/quasar/tree/dev/ui/icon-set
+  -->
+  <script src="fontawesome-v5.umd.min.js"></script>
+
+  <script src="moment.js"></script>
+  <script src="lodash.min.js"></script>
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9LlE6qeaBalChFc6VzdCU7yPmWf7ejaY"></script>
+
+  <script src="components/Bar.js"></script>
+  <script src="components/FindTrain.js"></script>
+  <script src="components/ReturnTrain.js"></script>
+  <script src="components/Foo.js"></script>
+  <script src="components/Home.js"></script>
+  <script src="components/Register.js"></script>
+  <script src="components/SignIn.js"></script>
+  <script src="components/Summary.js"></script>
+  <script src="components/Payment.js"></script>
+  <script src="components/Basket.js"></script>
+  <script src="components/Info.js"></script>
+  <script src="components/FaultReport.js"></script>
+  <script src="components/RouteDetails.js"></script>
+  <script src="components/Chat.js"></script>
+  <script src="components/FaqItem.js"></script>
+  <script src="components/CheapTickets.js"></script>
+  <script src="components/LiveDeparture.js"></script>
+  <script src="components/UsingApp.js"></script>
+  <script src="app.js"></script>
+  <script src="data.js"></script>
+
+</body>
+</html>
