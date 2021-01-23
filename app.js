@@ -1,31 +1,44 @@
 var localD = localStorage.getItem('greater_trains');
 var localO = JSON.parse(localD);
-if(localD === null || !localO.hasOwnProperty('users') || ! localO.hasOwnProperty('bookingTicket') 
-  || ! localO.hasOwnProperty('stations') || !localO.hasOwnProperty('trains') || !localO.hasOwnProperty('basket') 
-  || !localO.hasOwnProperty('faqs') || !localO.hasOwnProperty('serches') || !localO.hasOwnProperty('wallet') || !localO.hasOwnProperty('returnTicket')) {
+
+if(localD === null || !localO.hasOwnProperty('users')  
+  || !localO.hasOwnProperty('stations') || !localO.hasOwnProperty('trains') 
+  || !localO.hasOwnProperty('basket') || !localO.hasOwnProperty('faqs') 
+  || !localO.hasOwnProperty('serches') || !localO.hasOwnProperty('wallet') 
+  || !localO.hasOwnProperty('returnTicket') || ! localO.hasOwnProperty('bookingTicket')) {
   localStorage.setItem('greater_trains', 
     JSON.stringify(
-      {"users":
-      [
-        {
-          "email":"inyene@gmail.com",
-          "password":"red",
-          "telephone":"903900403",
-          "fname":"Akpabio",
-          "lname":"Akpabio",
-          "postcode":"90392",
-          "country":"Nigeria",
-          "address":"22 dmsndjdfnj"
-        }
-      ],
-      "basket": [],
-      "bookingTicket": {
-        type: 'Single',
-        "fromStation":"Norwich",
-        "toStation":"Norwood",
-        "dateTime":"2019-08-03 13:00",
-        "adult":1,
-        "childs":1,"departArrive":"one"},"stations":["Norwich","London Victoria","Norwood","Alexandria","Attadale","Bamber Bridge","Berry Brow","Jordan Hill","St James Park"],"faqs":[{"name":"Assisted Travel","id":1,"data":[{"q":"Can Wheelchair users pass through automatic ticket gates?","a":"The ticket gates are.."},{"q":"How do i make a booking for a wheelchair user?","a":"To make a wheelchair booking call our Assited Travel team 080002828"}]},{"name":"Booking","id":2,"data":[]},{"name":"Car Parking","id":3,"data":[]},{"name":"Lost Property","id":4,"data":[]}],"wallet":[],"returnTicket":null,"serches":[]}));
+      {
+        "users":
+        [
+          {
+            "email":"inyene@gmail.com",
+            "password":"red",
+            "telephone":"903900403",
+            "fname":"Akpabio",
+            "lname":"Akpabio",
+            "postcode":"90392",
+            "country":"Nigeria",
+            "address":"22 dmsndjdfnj"
+          }
+        ],
+        "basket": [],
+        "bookingTicket": {
+          type: 'Single',
+          "fromStation":"Norwich",
+          "toStation":"Norwood",
+          "dateTime":"2019-08-03 13:00",
+          "adult":1,
+          "childs":1,
+          "departArrive":"one"
+        },
+        "stations":["Norwich","London Victoria","Norwood","Alexandria","Attadale","Bamber Bridge","Berry Brow","Jordan Hill","St James Park"],
+        "faqs":[{"name":"Assisted Travel","id":1,"data":[{"q":"Can Wheelchair users pass through automatic ticket gates?","a":"The ticket gates are.."},{"q":"How do i make a booking for a wheelchair user?","a":"To make a wheelchair booking call our Assited Travel team 080002828"}]},{"name":"Booking","id":2,"data":[]},{"name":"Car Parking","id":3,"data":[]},{"name":"Lost Property","id":4,"data":[]}],
+        "wallet":[],
+        "returnTicket":null,
+        "serches":[]
+    }
+  ));
 }
 
 window.Loc = {
